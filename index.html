@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育資金シミュレーター｜FP相談 | NewArc LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f4f8fb;
+    --warm-white: #eef5fa;
+    --ink: #1e3a4a;
+    --brown: #1a6b8a;
+    --brown-light: #2e9ab5;
+    --brown-pale: #a8d8ea;
+    --accent: #0e86a8;
+    --accent-light: #2eb3d4;
+    --green: #1a9e6b;
+    --green-light: #d4f5e8;
+    --gold: #f0a500;
+    --shadow: rgba(14,134,168,0.12);
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #0a4f6e;
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--brown-pale);
+  }
+  .header-cta {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .header-cta:hover { background: var(--accent-light); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(145deg, #0a4f6e 0%, #0e86a8 50%, #2eb3d4 100%);
+    color: white;
+    text-align: center;
+    padding: 56px 24px 64px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    letter-spacing: .08em;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+  .hero h1 em {
+    color: #f5d98a;
+    font-style: normal;
+  }
+  .hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,.92);
+    max-width: 480px;
+    margin: 0 auto 28px;
+    text-shadow: 0 1px 4px rgba(0,0,0,.3);
+  }
+  .hero-scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--ink);
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
+  .hero-scroll:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.4); }
+  .hero-scroll span { font-size: 18px; }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    background: white;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--brown);
+    font-weight: 500;
+  }
+  .trust-item .icon { font-size: 16px; }
+
+  /* ── SECTION ── */
+  .section { padding: 48px 20px; width: 100%; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(18px, 4vw, 26px);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .section-desc { font-size: 14px; color: #555; margin-bottom: 32px; }
+
+  /* ── COST OVERVIEW ── */
+  .cost-timeline {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+  .cost-timeline h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--brown);
+  }
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+  }
+  @media(max-width:900px) { .timeline-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media(max-width:480px) { .timeline-grid { grid-template-columns: repeat(2,1fr); } }
+  .tl-item {
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 12px 10px;
+    text-align: center;
+    position: relative;
+  }
+  .tl-item.public { border-top: 3px solid var(--green); }
+  .tl-item.private { border-top: 3px solid var(--accent); }
+  .tl-emoji { font-size: 22px; margin-bottom: 4px; }
+  .tl-name { font-size: 11px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .tl-pub { font-size: 11px; color: var(--green); font-weight: 600; }
+  .tl-pri { font-size: 11px; color: var(--accent); font-weight: 600; }
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    font-size: 12px;
+  }
+  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; }
+
+  /* ── SIMULATOR ── */
+  .simulator-wrap {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 32px var(--shadow);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .sim-header {
+    background: linear-gradient(135deg, #0e86a8 0%, #0a5f80 100%);
+    color: white;
+    padding: 24px 28px;
+  }
+  .sim-header h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .sim-header p { font-size: 13px; opacity: .8; }
+
+  .sim-body { padding: 28px; }
+
+  /* STEP INDICATOR */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+    gap: 0;
+  }
+  .step-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e0d8cf;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all .3s;
+    flex-shrink: 0;
+  }
+  .step-dot.active { background: var(--brown); color: white; }
+  .step-dot.done { background: var(--green); color: white; }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: #e0d8cf;
+    transition: background .3s;
+  }
+  .step-line.done { background: var(--green); }
+  .step-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #999;
+    margin-top: 6px;
+    margin-bottom: 24px;
+  }
+  .step-label span { flex: 1; text-align: center; }
+
+  /* FORM GROUPS */
+  .form-group { margin-bottom: 22px; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 8px;
+  }
+  .form-label .required {
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .form-hint { font-size: 12px; color: #888; margin-top: 4px; }
+
+  select, input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e0d8cf;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--warm-white);
+    color: var(--ink);
+    appearance: none;
+    transition: border-color .2s;
+  }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230e86a8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  select:focus, input:focus { outline: none; border-color: var(--brown); }
+
+  /* RADIO CARDS */
+  .radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+  }
+  .radio-card input[type="radio"] { display: none; }
+  .radio-card label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    border: 2px solid #e0d8cf;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    transition: all .2s;
+    background: var(--warm-white);
+  }
+  .radio-card label .emoji { font-size: 22px; }
+  .radio-card input:checked + label {
+    border-color: var(--brown);
+    background: #f5ede2;
+    color: var(--brown);
+    font-weight: 700;
+  }
+
+  /* SCHOOL PATH TABLE */
+  .school-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .school-table th {
+    background: var(--cream);
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--brown);
+    text-align: left;
+    border-bottom: 2px solid var(--brown-pale);
+  }
+  .school-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0e8e0;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .school-table tr:last-child td { border-bottom: none; }
+  .school-table tr:hover td { background: var(--warm-white); }
+  .school-table select {
+    padding: 7px 28px 7px 10px;
+    font-size: 13px;
+  }
+  .school-icon { font-size: 18px; margin-right: 6px; }
+
+  /* QUICK PATTERN */
+  .pattern-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .pattern-btn {
+    padding: 12px 8px;
+    border: 2px solid #e0d8cf;
+    border-radius: var(--radius-sm);
+    background: var(--warm-white);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--ink);
+    transition: all .2s;
+    text-align: center;
+  }
+  .pattern-btn .p-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .pattern-btn:hover, .pattern-btn.selected {
+    border-color: var(--brown);
+    background: #f5ede2;
+    color: var(--brown);
+  }
+
+  /* STEP PANELS */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  /* BUTTONS */
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #0e86a8 0%, #0a5f80 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,134,168,.4); }
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: var(--brown);
+    border: 2px solid var(--brown);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 10px;
+  }
+  .btn-secondary:hover { background: #f5ede2; }
+  .btn-accent {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #f0a500 0%, #d48c00 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: .02em;
+  }
+  .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,165,0,.5); }
+
+  /* ── RESULT ── */
+  #result-section { display: none; }
+  .result-hero {
+    background: linear-gradient(145deg, #0a4f6e 0%, #0e86a8 100%);
+    color: white;
+    padding: 36px 28px;
+    text-align: center;
+  }
+  .result-amount {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(36px, 10vw, 64px);
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+  .result-amount-label { font-size: 13px; opacity: .7; margin-bottom: 8px; }
+  .result-subtitle { font-size: 13px; opacity: .75; margin-top: 8px; }
+
+  .result-breakdown {
+    padding: 28px;
+    background: white;
+  }
+  .breakdown-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 16px;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0e8e0;
+    font-size: 14px;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row .stage {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .breakdown-row .amount { font-weight: 700; color: var(--brown); }
+
+  /* SAVING GAUGE */
+  .saving-card {
+    background: var(--green-light);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin: 20px 28px;
+    border-left: 4px solid var(--green);
+  }
+  .saving-card h4 { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+  .gauge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .gauge-bar { flex: 1; height: 8px; background: #cde8d4; border-radius: 4px; overflow: hidden; }
+  .gauge-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width 1s ease; }
+  .gauge-label { font-size: 12px; color: var(--green); font-weight: 700; white-space: nowrap; }
+
+  /* ANXIETY TRIGGER */
+  .anxiety-card {
+    background: #eef7fb;
+    border: 2px solid #a8d8ea;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 0 0 24px;
+    position: relative;
+  }
+  .anxiety-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+  .anxiety-card h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .anxiety-card p { font-size: 14px; color: #555; line-height: 1.8; }
+
+  /* CTA BLOCK */
+  .cta-block {
+    background: white;
+    padding: 32px 28px;
+    border-top: 1px solid #f0e8e0;
+  }
+  .cta-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .cta-desc { font-size: 13px; color: #666; margin-bottom: 22px; line-height: 1.8; }
+  .cta-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .cta-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .cta-feature .check {
+    width: 22px;
+    height: 22px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  /* CONSULTATION FORM */
+  .consult-form { padding: 28px; background: var(--cream); }
+  .consult-form h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .consult-form p { font-size: 13px; color: #666; margin-bottom: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:480px) { .form-row { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  .faq-item {
+    background: white;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px var(--shadow);
+  }
+  .faq-q {
+    padding: 16px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .faq-q::after { content: '＋'; color: var(--brown); font-size: 18px; }
+  .faq-q.open::after { content: '－'; }
+  .faq-a {
+    display: none;
+    padding: 0 20px 16px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+  }
+  .faq-a.open { display: block; }
+
+  /* FOOTER */
+  footer {
+    background: #0a4f6e;
+    color: rgba(255,255,255,.75);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 12px;
+    line-height: 2;
+  }
+  footer a { color: #a8d8ea; text-decoration: none; }
+
+  /* UTILS */
+  .mt-8 { margin-top: 8px; }
+  .mb-0 { margin-bottom: 0; }
+  .text-center { text-align: center; }
+  .divider { height: 1px; background: #cce4f0; margin: 24px 0; }
+
+  /* CHILD TABS */
+  .child-tab-btn {
+    padding: 10px 18px;
+    border: 2px solid #e0d8cf;
+    border-radius: 50px;
+    background: var(--warm-white);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: #888;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .child-tab-btn.active {
+    background: var(--brown);
+    border-color: var(--brown);
+    color: white;
+  }
+  .child-panel { display: none; }
+  .child-panel.active { display: block; }
+
+  .child-panel-inner {
+    background: var(--cream);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid #e8ddd4;
+  }
+  .child-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .child-panel-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--brown);
+  }
+
+  @media(max-width:600px) {
+    .sim-body { padding: 20px; }
+    .result-hero { padding: 28px 20px; }
+    .result-breakdown, .cta-block, .consult-form { padding: 20px; }
+    .saving-card { margin: 16px 20px; }
+  }
+
+  /* ANIMATION */
+  .fade-in {
+    animation: fadeIn .5s ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .count-up { transition: all 1s ease; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">🌱 NewArc LLC</div>
+  <a href="https://calendar.app.google/sFhvxBF3fn6Gz7Nf9" target="_blank" rel="noopener noreferrer" class="header-cta" style="text-decoration:none;">FP相談を予約する</a>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📚 保育園〜大学まで完全対応</div>
+  <h1>お子さまの教育費、<br><em>今すぐ確認</em>しておきましょう</h1>
+  <p>幼稚園・小中高・大学まで、進路ごとの目安額を3分で試算。将来に必要な備えの「見える化」から始めましょう。</p>
+  <a href="#simulator" class="hero-scroll"><span>▼</span> シミュレーターを始める</a>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="icon">✅</span>登録不要で試算</div>
+  <div class="trust-item"><span class="icon">🔒</span>個人情報不要で試算</div>
+  <div class="trust-item"><span class="icon">⏱</span>約3分で完了</div>
+  <div class="trust-item"><span class="icon">👨‍💼</span>FP相談に繋げられる</div>
+</div>
+
+<!-- OVERVIEW SECTION -->
+<div class="section">
+  <div class="section-inner">
+  <div class="section-label">教育費の相場感</div>
+  <div class="section-title">保育園から大学まで<br>いくらかかるの？</div>
+  <div class="section-desc">公立と私立では大きな差があります。まずは全体像を確認しましょう。</div>
+
+  <div class="cost-timeline">
+    <h3>📊 各段階の目安費用（在籍期間合計・学校外費用込み）</h3>
+    <div class="timeline-grid">
+      <div class="tl-item public">
+        <div class="tl-emoji">🍼</div>
+        <div class="tl-name">認可保育園<br>(0〜5歳)</div>
+        <div class="tl-pub">認可 約139万円</div>
+        <div class="tl-pri">認可外 約192万円</div>
+      </div>
+      <div class="tl-item public">
+        <div class="tl-emoji">🎒</div>
+        <div class="tl-name">幼稚園<br>(3〜5歳)</div>
+        <div class="tl-pub">公立 約67万円</div>
+        <div class="tl-pri">私立 約158万円</div>
+      </div>
+      <div class="tl-item public">
+        <div class="tl-emoji">✏️</div>
+        <div class="tl-name">小学校<br>(6年間)</div>
+        <div class="tl-pub">公立 約202万円</div>
+        <div class="tl-pri">私立 約1,097万円</div>
+      </div>
+      <div class="tl-item public">
+        <div class="tl-emoji">📖</div>
+        <div class="tl-name">中学校<br>(3年間)</div>
+        <div class="tl-pub">公立 約163万円</div>
+        <div class="tl-pri">私立 約468万円</div>
+      </div>
+      <div class="tl-item public">
+        <div class="tl-emoji">🏫</div>
+        <div class="tl-name">高校<br>(3年間)</div>
+        <div class="tl-pub">公立 約179万円</div>
+        <div class="tl-pri">私立 約309万円</div>
+      </div>
+      <div class="tl-item public">
+        <div class="tl-emoji">🎓</div>
+        <div class="tl-name">大学<br>(4年間)</div>
+        <div class="tl-pub">国公立 約243万円</div>
+        <div class="tl-pri">私立文系 約396万円</div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:var(--green);"></span>公立・認可系</span>
+      <span><span class="legend-dot" style="background:var(--accent);"></span>私立・認可外系</span>
+      <span style="font-size:11px;color:#999;">※文科省「子供の学習費調査」・厚労省データ等より概算。大学は授業料＋入学金のみ。</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- SIMULATOR -->
+<div id="simulator" style="background: var(--warm-white); padding: 20px 0;">
+<div style="max-width: 900px; margin:0 auto; padding: 0 20px;">
+
+  <div class="section-label text-center" style="margin-bottom:4px;">シミュレーター</div>
+  <div class="section-title text-center" style="margin-bottom:6px;">あなたのご家庭の<br>教育費を試算する</div>
+  <div class="section-desc text-center">お子さまの進路を選ぶだけ。3ステップで目安額がわかります。</div>
+
+  <div class="simulator-wrap" id="simWrap">
+    <div class="sim-header">
+      <h2>🎓 教育資金シミュレーター</h2>
+      <p>入力した情報はサーバーに送信されません。安心してお試しください。</p>
+    </div>
+    <div class="sim-body">
+
+      <!-- STEP INDICATOR -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot1">1</div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-dot" id="dot2">2</div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-dot" id="dot3">3</div>
+      </div>
+      <div class="step-label">
+        <span>基本情報</span>
+        <span>進路選択</span>
+        <span>試算結果</span>
+      </div>
+
+      <!-- STEP 1: 基本情報 -->
+      <div class="step-panel active" id="step1">
+        <div class="form-group">
+          <label class="form-label">お子さまの人数<span class="required">必須</span></label>
+          <div class="radio-group">
+            <div class="radio-card"><input type="radio" name="children" id="c1" value="1" checked onchange="updateAgeInputs()"><label for="c1"><span class="emoji">👶</span>1人</label></div>
+            <div class="radio-card"><input type="radio" name="children" id="c2" value="2" onchange="updateAgeInputs()"><label for="c2"><span class="emoji">👶👶</span>2人</label></div>
+            <div class="radio-card"><input type="radio" name="children" id="c3" value="3" onchange="updateAgeInputs()"><label for="c3"><span class="emoji">👨‍👩‍👧‍👦</span>3人</label></div>
+          </div>
+        </div>
+
+        <div class="form-group" id="age-inputs-wrap">
+          <!-- 子どもの年齢入力は JS で動的生成 -->
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="savings">現在の教育費用の貯蓄額（合計）</label>
+          <select id="savings">
+            <option value="0">まだ貯めていない</option>
+            <option value="50">約50万円</option>
+            <option value="100">約100万円</option>
+            <option value="200">約200万円</option>
+            <option value="300">約300万円</option>
+            <option value="500">約500万円以上</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" onclick="goToStep2()">次へ：お子さまごとに進路を選ぶ →</button>
+      </div>
+
+      <!-- STEP 2: 子どもごとの進路選択 -->
+      <div class="step-panel" id="step2">
+
+        <!-- 子どもタブ -->
+        <div id="child-tabs-nav" style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;"></div>
+
+        <!-- 子ども別パネル（JSで生成） -->
+        <div id="child-panels-wrap"></div>
+
+        <div class="form-group" style="margin-top:8px;">
+          <label class="form-label">塾・習い事の予算（月額・全員共通）</label>
+          <select id="juku">
+            <option value="0">特に考えていない</option>
+            <option value="1">月1万円程度</option>
+            <option value="3">月3万円程度</option>
+            <option value="5">月5万円程度</option>
+            <option value="10">月10万円以上</option>
+          </select>
+          <div class="form-hint">お子さま1人あたりの月額を入力してください</div>
+        </div>
+
+        <button class="btn-primary" onclick="calculate()">🔍 試算結果を見る</button>
+        <button class="btn-secondary" onclick="goStep(1)">← 戻る</button>
+      </div>
+
+      <!-- STEP 3: ダミーパネル（結果は #result-section に表示） -->
+      <div class="step-panel" id="step3"></div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RESULT SECTION -->
+<div id="result-section">
+  <div class="simulator-wrap fade-in" style="max-width:900px; margin: 28px auto; border-radius: var(--radius);">
+
+    <!-- RESULT HERO -->
+    <div class="result-hero">
+      <div class="result-amount-label">お子さまにかかる教育費の目安（総額）</div>
+      <div class="result-amount" id="totalAmount">¥0</div>
+      <div class="result-subtitle" id="resultSubtitle">試算結果</div>
+    </div>
+
+    <!-- BREAKDOWN -->
+    <div class="result-breakdown">
+      <div class="breakdown-title">📋 内訳</div>
+      <div id="breakdownList"></div>
+    </div>
+
+    <!-- SAVING GAUGE -->
+    <div class="saving-card">
+      <h4>💰 現在の貯蓄との差額</h4>
+      <div class="gauge-row">
+        <span style="font-size:12px; color:#555; min-width:60px;">現在の貯蓄</span>
+        <div class="gauge-bar"><div class="gauge-fill" id="savingsBar" style="width:0%"></div></div>
+        <span class="gauge-label" id="savingsLabel">0万円</span>
+      </div>
+      <div style="font-size:13px; color:#555;" id="gapText"></div>
+    </div>
+
+    <!-- ANXIETY CARD -->
+    <div class="anxiety-card" style="margin:0 28px 0;">
+      <span class="anxiety-icon" id="anxietyIcon">😟</span>
+      <h3 id="anxietyTitle">この金額、本当に準備できますか？</h3>
+      <p id="anxietyText">毎月の積立だけで本当に足りるのか、不安になってきませんか？教育費は「いつから・いくら貯めるか」の計画が大切です。今のうちにプロに相談することで、余裕ある資金計画を立てることができます。</p>
+    </div>
+
+    <!-- CTA BLOCK -->
+    <div class="cta-block">
+      <div class="cta-title">「備え方」を、<br>一緒に考えませんか？</div>
+      <div class="cta-desc">試算結果はあくまでも目安です。実際の教育費は進路変更や物価上昇で変わります。ファイナンシャルプランナーが、あなたの収入・貯蓄・目標に合わせた具体的なプランをご提案します。</div>
+      <div class="cta-features">
+        <div class="cta-feature"><div class="check">✓</div>専門FPによる個別対応</div>
+        <div class="cta-feature"><div class="check">✓</div>保険・投資の売り込みなし</div>
+        <div class="cta-feature"><div class="check">✓</div>オンライン・対面どちらでもOK</div>
+        <div class="cta-feature"><div class="check">✓</div>試算結果を持参して相談できる</div>
+      </div>
+      <a href="https://calendar.app.google/sFhvxBF3fn6Gz7Nf9" target="_blank" rel="noopener noreferrer" class="btn-accent" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+        📅 相談を予約する →
+      </a>
+      <div style="text-align:center; font-size:12px; color:#999; margin-top:12px;">Googleカレンダーでご都合の良い日時をお選びいただけます。</div>
+    </div>
+
+    <div style="padding: 20px 28px; background: var(--cream);">
+      <button class="btn-secondary" onclick="resetSim()" style="max-width:300px;margin:0 auto;display:block;">↺ もう一度試算する</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONSULT SECTION -->
+<div id="consult-section" style="background: white; padding: 10px 0 56px;">
+<div style="max-width: 900px; margin:0 auto; padding: 0 20px;">
+
+  <div class="section-label text-center" style="padding-top:48px; margin-bottom:4px;">FP相談のご予約</div>
+  <div class="section-title text-center" style="margin-bottom:8px;">あなたのペースで、<br>一歩を踏み出しましょう</div>
+  <div class="section-desc text-center">しつこい勧誘は一切ありません。お子さまの将来のために、一緒に考えましょう。</div>
+
+  <!-- 料金ポリシー -->
+  <div style="
+    background: linear-gradient(135deg, #faf7f2 0%, #f5ede2 100%);
+    border: 1px solid var(--brown-pale);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  ">
+    <div style="display:flex; align-items:flex-start; gap:14px;">
+      <div style="font-size:28px; flex-shrink:0;">🌿</div>
+      <div>
+        <div style="font-family:'Noto Serif JP',serif; font-size:16px; font-weight:700; color:var(--brown); margin-bottom:10px; letter-spacing:.02em;">
+          ご満足いただいた分だけ、お気持ちをお支払いください
+        </div>
+        <p style="font-size:13px; color:#666; line-height:1.9; margin:0;">
+          NewArc LLC のコンサルティングは、<strong style="color:var(--brown);">自由価格設定方式（Pay What You Value）</strong>を採用しております。<br>
+          相談後、内容にご満足いただけた場合に、あなたご自身が価値を感じた金額をお支払いいただく形です。<br>
+          料金をご心配なくお気軽にご予約ください。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- カレンダー予約ボタン -->
+  <div style="text-align:center; max-width:600px; margin:0 auto;">
+    <a
+      href="https://calendar.app.google/sFhvxBF3fn6Gz7Nf9"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 20px 32px;
+        background: linear-gradient(135deg, #f0a500 0%, #d48c00 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        font-size: 17px;
+        font-weight: 700;
+        font-family: inherit;
+        letter-spacing: .02em;
+        box-shadow: 0 4px 20px rgba(240,165,0,.35);
+        transition: transform .2s, box-shadow .2s;
+      "
+      onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(240,165,0,.5)'"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(240,165,0,.35)'"
+    >
+      <span style="font-size:22px;">📅</span>
+      相談を予約する
+      <span style="font-size:13px; opacity:.85;">→ Google カレンダーで空き確認</span>
+    </a>
+    <div style="margin-top:12px; font-size:12px; color:#999; line-height:1.8;">
+      クリックするとGoogleカレンダーの予約ページへ移動します。<br>
+      ご都合の良い日時をお選びいただけます。
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="section" style="padding-top:20px;">
+  <div class="section-inner">
+  <div class="section-label">よくある質問</div>
+  <div class="section-title" style="margin-bottom:24px;">相談前の疑問を解消</div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">相談料はいくらですか？</div>
+    <div class="faq-a">NewArc LLC では「自由価格設定方式（Pay What You Value）」を採用しています。相談後、内容にご満足いただけた場合に、あなた自身が感じた価値の分だけお支払いいただく形をとっております。事前に費用をご心配なくお申し込みください。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">どんな人が相談に来ていますか？</div>
+    <div class="faq-a">子どもが生まれたばかりの方から、小学生のお子さまをお持ちの方まで幅広くいらっしゃいます。「なんとなく不安」という段階でのご相談が一番多いです。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">シミュレーターの金額はどのくらい正確ですか？</div>
+    <div class="faq-a">文科省の学校種別調査などをもとにした目安額です。実際には地域差・家庭差があります。詳細なシミュレーションはFPとの面談でお作りします。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">今から始めても遅くないですか？</div>
+    <div class="faq-a">早ければ早いほど有利ですが、「気づいたとき」が最適なタイミングです。お子さまの年齢に合わせた現実的なプランをご提案します。</div>
+  </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>🌱 NewArc LLC</div>
+  <div>〒107-0062 東京都港区南青山2丁目2番15号</div>
+  <div style="margin-top:8px;"><a href="#">プライバシーポリシー</a> | <a href="#">利用規約</a> | <a href="#">会社概要</a></div>
+  <div style="margin-top:8px; font-size:11px;">※本シミュレーターは文科省「子供の学習費調査」・厚労省データ等をもとにした目安額であり、将来の教育費を保証するものではありません。実際の費用は地域・家庭・進路変更・物価上昇等により大きく異なる場合があります。</div>
+  <div style="margin-top:4px; font-size:11px;">© 2025 NewArc LLC. All rights reserved.</div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+// コスト定義（万円）
+// 根拠：文科省「子供の学習費調査（2023年度）」
+//       厚労省・各FP機関の保育料統計
+//       国公立大学：文科省標準額、私立大学：各種平均
+// ══════════════════════════════════════════════════════
+
+const NURSERY_ANNUAL = {
+  '認可':   { 0:34.8, 1:32.2, 2:31.9, 3:22.5, 4:21.4, 5:22.1 },
+  '認可外': { 0:48.0, 1:44.4, 2:44.0, 3:31.1, 4:29.5, 5:30.5 }
+};
+
+const SCHOOL_COSTS = {
+  'public-kinder':      { label:'幼稚園（公立）',       emoji:'🎒', annualCost: 18.5, years: 3 },
+  'private-kinder':     { label:'幼稚園（私立）',       emoji:'🎒', annualCost: 34.7, years: 3 },
+  'skip-kinder':        null,
+  'public-elementary':  { label:'小学校（公立）',       emoji:'✏', annualCost: 33.6, years: 6 },
+  'private-elementary': { label:'小学校（私立）',       emoji:'✏', annualCost:182.8, years: 6 },
+  'public-junior':      { label:'中学校（公立）',       emoji:'📖', annualCost: 54.2, years: 3 },
+  'private-junior':     { label:'中学校（私立）',       emoji:'📖', annualCost:156.0, years: 3 },
+  'public-high':        { label:'高校（公立・全日制）',  emoji:'🏫', annualCost: 59.8, years: 3 },
+  'private-high':       { label:'高校（私立・全日制）',  emoji:'🏫', annualCost:103.0, years: 3 },
+};
+
+const UNIV_COSTS = {
+  'public-univ':       { label:'大学（国公立）',        emoji:'🎓', tuition: 53.58, admission: 28.2,  years: 4 },
+  'private-lit-univ':  { label:'大学（私立・文系）',    emoji:'🎓', tuition: 90.0,  admission: 22.0,  years: 4 },
+  'private-sci-univ':  { label:'大学（私立・理系）',    emoji:'🎓', tuition:130.0,  admission: 25.0,  years: 4 },
+  'private-med-univ':  { label:'大学（私立・医歯薬系）',emoji:'🎓', tuition:300.0,  admission:100.0,  years: 4 },
+  'skip-univ':         null,
+};
+
+const PATTERN_DEFS = {
+  'all-public':  { n02:'認可',  n35:'skip', kinder:'public-kinder',   elem:'public-elementary',  jun:'public-junior',  high:'public-high',  univ:'public-univ' },
+  'all-private': { n02:'認可外',n35:'skip', kinder:'private-kinder',  elem:'private-elementary', jun:'private-junior', high:'private-high', univ:'private-lit-univ' },
+  'mix-typical': { n02:'認可',  n35:'skip', kinder:'public-kinder',   elem:'public-elementary',  jun:'public-junior',  high:'private-high', univ:'private-lit-univ' },
+  'mix-premium': { n02:'認可',  n35:'skip', kinder:'private-kinder',  elem:'public-elementary',  jun:'private-junior', high:'private-high', univ:'private-lit-univ' },
+};
+
+const CHILD_LABELS = ['第1子', '第2子', '第3子'];
+const CHILD_EMOJI  = ['👶', '🧒', '👦'];
+let currentChildCount = 1;
+
+// ── 年齢セレクト HTML 生成ヘルパー ──
+function ageOptionsHTML(selectedAge) {
+  const opts = [
+    [0,'0歳（産まれたばかり）'],[1,'1歳'],[2,'2歳'],[3,'3歳'],[4,'4歳'],[5,'5歳'],
+    [6,'6歳（小学1年生）'],[7,'7歳（小学2年生）'],[8,'8歳（小学3年生）'],
+    [9,'9歳（小学4年生）'],[10,'10歳（小学5年生）'],[11,'11歳（小学6年生）'],
+    [12,'12歳（中学1年生）'],[13,'13歳（中学2年生）'],[14,'14歳（中学3年生）'],
+    [15,'15歳（高校1年生）'],[16,'16歳（高校2年生）'],[17,'17歳（高校3年生）'],
+  ];
+  return opts.map(([v, t]) =>
+    `<option value="${v}" ${v == selectedAge ? 'selected' : ''}>${t}</option>`
+  ).join('');
+}
+
+// ── Step1：子ども人数変更 → 年齢入力欄を更新 ──
+function updateAgeInputs() {
+  const count = parseInt(document.querySelector('input[name="children"]:checked').value);
+  currentChildCount = count;
+  const wrap = document.getElementById('age-inputs-wrap');
+  let html = '';
+  for (let i = 0; i < count; i++) {
+    html += `
+      <div style="margin-bottom:14px;">
+        <label class="form-label" for="child${i}age">
+          ${CHILD_EMOJI[i]} ${CHILD_LABELS[i]}の現在の年齢<span class="required">必須</span>
+        </label>
+        <select id="child${i}age">${ageOptionsHTML(0)}</select>
+      </div>
+    `;
+  }
+  wrap.innerHTML = html;
+}
+
+// ── Step2 へ進む前に子どもごとのタブ＆パネルを生成 ──
+function buildChildPanels() {
+  const count = parseInt(document.querySelector('input[name="children"]:checked').value);
+  currentChildCount = count;
+
+  // タブナビ
+  const tabsNav = document.getElementById('child-tabs-nav');
+  tabsNav.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'child-tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = `${CHILD_EMOJI[i]} ${CHILD_LABELS[i]}`;
+    btn.onclick = () => switchChildTab(i);
+    tabsNav.appendChild(btn);
+  }
+
+  // パネル
+  const panelsWrap = document.getElementById('child-panels-wrap');
+  panelsWrap.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const age = parseInt(document.getElementById(`child${i}age`)?.value || 0);
+    panelsWrap.innerHTML += buildChildPanel(i, age);
+  }
+}
+
+function buildChildPanel(idx, age) {
+  const cid = `c${idx}`;
+  return `
+  <div class="child-panel ${idx === 0 ? 'active' : ''}" id="panel-child${idx}">
+    <div class="child-panel-inner">
+      <div class="child-panel-header">
+        <div class="child-panel-title">${CHILD_EMOJI[idx]} ${CHILD_LABELS[idx]}（現在 ${age} 歳）の進路</div>
+        <div style="font-size:12px;color:#999;">パターン一括選択：
+          <button class="pattern-btn" style="display:inline-block;padding:5px 10px;font-size:11px;" onclick="applyPattern(${idx},'all-public')">全公立</button>
+          <button class="pattern-btn" style="display:inline-block;padding:5px 10px;font-size:11px;" onclick="applyPattern(${idx},'all-private')">全私立</button>
+          <button class="pattern-btn" style="display:inline-block;padding:5px 10px;font-size:11px;" onclick="applyPattern(${idx},'mix-typical')">ミックス</button>
+          <button class="pattern-btn" style="display:inline-block;padding:5px 10px;font-size:11px;" onclick="applyPattern(${idx},'mix-premium')">中学受験</button>
+        </div>
+      </div>
+
+      <table class="school-table">
+        <thead><tr><th>段階</th><th>選択</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="school-icon">🍼</span>保育園（0〜2歳）</td>
+            <td><select id="${cid}-nursery02">
+              <option value="認可">認可保育園</option>
+              <option value="認可外">認可外保育園</option>
+              <option value="skip">対象外（幼稚園へ）</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">🍼</span>保育園（3〜5歳）</td>
+            <td><select id="${cid}-nursery35">
+              <option value="認可">認可保育園</option>
+              <option value="認可外">認可外保育園</option>
+              <option value="skip">対象外（幼稚園へ）</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">🎒</span>幼稚園（3〜5歳）</td>
+            <td><select id="${cid}-kinder">
+              <option value="public-kinder">公立幼稚園</option>
+              <option value="private-kinder">私立幼稚園</option>
+              <option value="skip-kinder">対象外（保育園へ）</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">✏</span>小学校</td>
+            <td><select id="${cid}-elementary">
+              <option value="public-elementary">公立小学校</option>
+              <option value="private-elementary">私立小学校</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">📖</span>中学校</td>
+            <td><select id="${cid}-junior">
+              <option value="public-junior">公立中学校</option>
+              <option value="private-junior">私立中学校</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">🏫</span>高校</td>
+            <td><select id="${cid}-high">
+              <option value="public-high">公立高校（全日制）</option>
+              <option value="private-high">私立高校（全日制）</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td><span class="school-icon">🎓</span>大学</td>
+            <td><select id="${cid}-univ">
+              <option value="public-univ">国公立大学</option>
+              <option value="private-lit-univ">私立大学（文系）</option>
+              <option value="private-sci-univ">私立大学（理系）</option>
+              <option value="private-med-univ">私立大学（医歯薬系）</option>
+              <option value="skip-univ">進学しない予定</option>
+            </select></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function switchChildTab(idx) {
+  document.querySelectorAll('.child-tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.child-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+}
+
+function applyPattern(childIdx, patternName) {
+  const cid = `c${childIdx}`;
+  const p = PATTERN_DEFS[patternName];
+  document.getElementById(`${cid}-nursery02`).value = p.n02 === 'skip' ? 'skip' : p.n02;
+  document.getElementById(`${cid}-nursery35`).value = p.n35 === 'skip' ? 'skip' : p.n35;
+  document.getElementById(`${cid}-kinder`).value    = p.kinder;
+  document.getElementById(`${cid}-elementary`).value= p.elem;
+  document.getElementById(`${cid}-junior`).value    = p.jun;
+  document.getElementById(`${cid}-high`).value      = p.high;
+  document.getElementById(`${cid}-univ`).value      = p.univ;
+}
+
+function goToStep2() {
+  buildChildPanels();
+  goStep(2);
+}
+
+function goStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('step' + n);
+  if (panel) panel.classList.add('active');
+  for (let i = 1; i <= 3; i++) {
+    const d = document.getElementById('dot' + i);
+    if (!d) continue;
+    d.classList.remove('active','done');
+    if (i < n) d.classList.add('done');
+    else if (i === n) d.classList.add('active');
+  }
+  for (let i = 1; i <= 2; i++) {
+    const l = document.getElementById('line' + i);
+    if (l) l.classList.toggle('done', i < n);
+  }
+  const wrap = document.getElementById('simWrap');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── 1人分の費用計算 ──
+function calcNursery(type, ageFrom, ageTo) {
+  const table = NURSERY_ANNUAL[type];
+  if (!table) return 0;
+  let total = 0;
+  for (let age = ageFrom; age <= ageTo; age++) total += (table[age] || 0);
+  return Math.round(total * 10) / 10;
+}
+
+function calcOneChild(idx) {
+  const cid = `c${idx}`;
+  let subtotal = 0;
+  let items = [];
+
+  // 保育園 0〜2歳
+  const n02 = document.getElementById(`${cid}-nursery02`)?.value;
+  if (n02 && n02 !== 'skip') {
+    const cost = calcNursery(n02, 0, 2);
+    subtotal += cost;
+    items.push({ label:`保育園 0〜2歳（${n02}）`, emoji:'🍼', cost, note:'年齢別平均保育料×3年' });
+  }
+
+  // 保育園 3〜5歳
+  const n35 = document.getElementById(`${cid}-nursery35`)?.value;
+  if (n35 && n35 !== 'skip') {
+    const cost = calcNursery(n35, 3, 5);
+    subtotal += cost;
+    items.push({ label:`保育園 3〜5歳（${n35}）`, emoji:'🍼', cost, note:'年齢別平均保育料×3年' });
+  }
+
+  // 幼稚園
+  const kinderVal = document.getElementById(`${cid}-kinder`)?.value;
+  const kinder = SCHOOL_COSTS[kinderVal];
+  if (kinder) {
+    const cost = Math.round(kinder.annualCost * kinder.years * 10) / 10;
+    subtotal += cost;
+    items.push({ label: kinder.label, emoji: kinder.emoji, cost, note:`年間${kinder.annualCost}万×${kinder.years}年` });
+  }
+
+  // 小中高
+  ['elementary','junior','high'].forEach(key => {
+    const val = document.getElementById(`${cid}-${key}`)?.value;
+    const sc = SCHOOL_COSTS[val];
+    if (sc) {
+      const cost = Math.round(sc.annualCost * sc.years * 10) / 10;
+      subtotal += cost;
+      items.push({ label: sc.label, emoji: sc.emoji, cost, note:`年間${sc.annualCost}万×${sc.years}年（学習費調査）` });
+    }
+  });
+
+  // 大学
+  const univVal = document.getElementById(`${cid}-univ`)?.value;
+  const u = UNIV_COSTS[univVal];
+  if (u) {
+    const cost = Math.round((u.tuition * u.years + u.admission) * 10) / 10;
+    subtotal += cost;
+    items.push({ label: u.label, emoji: u.emoji, cost, note:`授業料${u.tuition}万×${u.years}年＋入学金${u.admission}万` });
+  }
+
+  return { subtotal: Math.round(subtotal * 10) / 10, items };
+}
+
+// ── メイン試算 ──
+function calculate() {
+  const count   = parseInt(document.querySelector('input[name="children"]:checked').value);
+  const savings = parseInt(document.getElementById('savings').value);
+  const jukuPer = parseInt(document.getElementById('juku').value);
+
+  let grandTotal = 0;
+  const bl = document.getElementById('breakdownList');
+  bl.innerHTML = '';
+
+  for (let i = 0; i < count; i++) {
+    const age = parseInt(document.getElementById(`child${i}age`)?.value || 0);
+    const { subtotal, items } = calcOneChild(i);
+
+    // 塾代（小〜高12年）
+    const jukuCost = Math.round(jukuPer * 12 * 10) / 10;
+    let childTotal = subtotal;
+    if (jukuPer > 0) {
+      childTotal = Math.round((subtotal + jukuCost) * 10) / 10;
+    }
+    grandTotal += childTotal;
+
+    // 子どもヘッダー
+    const header = document.createElement('div');
+    header.style.cssText = 'font-family:"Noto Serif JP",serif;font-size:15px;font-weight:700;color:var(--brown);padding:14px 0 8px;border-top:2px solid #f0e8e0;margin-top:12px;';
+    header.textContent = `${CHILD_EMOJI[i]} ${CHILD_LABELS[i]}（現在 ${age} 歳）`;
+    bl.appendChild(header);
+
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'breakdown-row';
+      row.innerHTML = `
+        <div class="stage">
+          <span>${item.emoji}</span>
+          <div>
+            <div>${item.label}</div>
+            <div style="font-size:11px;color:#999;margin-top:2px;">${item.note}</div>
+          </div>
+        </div>
+        <div class="amount">約${item.cost.toLocaleString()}万円</div>`;
+      bl.appendChild(row);
+    });
+
+    if (jukuPer > 0) {
+      const jukuRow = document.createElement('div');
+      jukuRow.className = 'breakdown-row';
+      jukuRow.innerHTML = `
+        <div class="stage"><span>📚</span><div><div>塾・習い事</div><div style="font-size:11px;color:#999;">月${jukuPer}万×12ヶ月×12年（小〜高）</div></div></div>
+        <div class="amount">約${jukuCost.toLocaleString()}万円</div>`;
+      bl.appendChild(jukuRow);
+    }
+
+    // 子ども小計
+    const subRow = document.createElement('div');
+    subRow.style.cssText = 'display:flex;justify-content:space-between;padding:10px 0;font-weight:700;font-size:14px;color:var(--brown);border-top:1px dashed #e0d8cf;margin-top:4px;';
+    subRow.innerHTML = `<span>${CHILD_LABELS[i]} 小計</span><span>約${childTotal.toLocaleString()}万円</span>`;
+    bl.appendChild(subRow);
+  }
+
+  grandTotal = Math.round(grandTotal * 10) / 10;
+
+  // 総合計行
+  const totalRow = document.createElement('div');
+  totalRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:18px;background:#eef7fb;border-radius:8px;padding:16px 12px;margin-top:16px;border:2px solid #a8d8ea;';
+  totalRow.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><span>📊</span><span>全員の合計（概算）</span></div><div style="color:var(--accent);font-size:22px;">約${grandTotal.toLocaleString()}万円</div>`;
+  bl.appendChild(totalRow);
+
+  // 月額積立目安（第1子基準）
+  const child0age = parseInt(document.getElementById('child0age')?.value || 0);
+  const yearsToUniv = Math.max(1, 18 - child0age);
+  const monthlyNeeded = Math.round((grandTotal - savings) / (yearsToUniv * 12) * 10) / 10;
+  if (monthlyNeeded > 0) {
+    const mRow = document.createElement('div');
+    mRow.style.cssText = 'text-align:center;padding:14px 0;font-size:13px;color:#666;line-height:1.9;';
+    mRow.innerHTML = `第1子の大学入学まで約<strong style="color:var(--brown)">${yearsToUniv}年</strong> — 月々<strong style="color:var(--accent);font-size:18px;">約${monthlyNeeded.toLocaleString()}万円</strong>の積立が目安です`;
+    bl.appendChild(mRow);
+  }
+
+  // 結果表示
+  const resultEl = document.getElementById('result-section');
+  resultEl.style.display = 'block';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  goStep(3);
+
+  const childLabel = count === 1 ? 'お子さま1人分' : `お子さま${count}人分`;
+  document.getElementById('resultSubtitle').textContent = `${childLabel}の概算合計（文科省データ等ベース）`;
+  animateCount('totalAmount', grandTotal, '約', '万円');
+
+  // 貯蓄ゲージ
+  const pct = Math.min(100, Math.round((savings / grandTotal) * 100));
+  document.getElementById('savingsBar').style.width = pct + '%';
+  document.getElementById('savingsLabel').textContent = savings + '万円';
+  const gap = Math.round((grandTotal - savings) * 10) / 10;
+  document.getElementById('gapText').innerHTML = gap > 0
+    ? `現在の貯蓄との差額は<strong style="color:var(--accent)">約${gap.toLocaleString()}万円</strong>です。進路変更・物価上昇も見込んだ計画的な準備をお勧めします。`
+    : `<strong style="color:var(--green)">現在の貯蓄で目標額をカバーできる見込みです。</strong>ただし物価上昇・進路変更も考慮した見直しを定期的に行いましょう。`;
+
+  // 不安喚起コピー
+  const copies = [
+    { icon:'😟', title:`約${grandTotal.toLocaleString()}万円、計画的に備えられていますか？`,
+      text:`この金額は文科省データをもとにした"現在の物価"での目安です。実際には進路変更・物価上昇・習い事の増加などで費用は変動します。「今の生活を保ちながら、いつから・いくら積み立てるか」をFPと一緒に整理しませんか。` },
+    { icon:'🤔', title:'教育費と老後資金、両立できていますか？',
+      text:`教育費の準備と並行して、老後資金・住宅ローン・保障の見直しも必要です。NISAやiDeCoを活用した優先順位の整理は、プロのアドバイスがあると格段にスムーズになります。` },
+    { icon:'💡', title:'学資保険だけでは足りないケースも',
+      text:`低金利時代の今、学資保険の返戻率は以前より低下しています。投資信託や積立NISAとの組み合わせで、より効率的に準備できる可能性があります。あなたの家計に合った方法をFPに相談してみましょう。` },
+  ];
+  const pick = copies[Math.floor(Math.random() * copies.length)];
+  document.getElementById('anxietyIcon').textContent  = pick.icon;
+  document.getElementById('anxietyTitle').textContent = pick.title;
+  document.getElementById('anxietyText').textContent  = pick.text;
+}
+
+function animateCount(id, target, prefix, suffix) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let current = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = prefix + Math.round(current).toLocaleString() + suffix;
+    if (current >= target) clearInterval(timer);
+  }, 16);
+}
+
+function resetSim() {
+  document.getElementById('result-section').style.display = 'none';
+  goStep(1);
+  const wrap = document.getElementById('simWrap');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+// 初期化
+window.addEventListener('DOMContentLoaded', () => updateAgeInputs());
+</script>
+</body>
+</html>
